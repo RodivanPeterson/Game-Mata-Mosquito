@@ -103,7 +103,7 @@ function posicaoRandomica(){
     mosquito.style.top = posicaoY + 'px'
     mosquito.style.position = 'absolute'
     mosquito.id = 'mosquito'
-    mosquito.onclick = function(){
+    mosquito.onmousedown = function(){
         this.remove()
 
     }

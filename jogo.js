@@ -1,8 +1,6 @@
-var altura = 0
-var largura = 0
 var vidas = 1
 var tempo = 15
-
+var criarMosquitos = null
 var criaMosquitoTempo = 1500
 
 var nivel = window.location.search
@@ -18,13 +16,7 @@ nivel = nivel.replace('?', '')
     criaMosquitoTempo = 1000
 }
 
-function ajustaTamanhoPalcoJogo() {
-    altura = window.innerHeight
-    largura = window.innerWidth
-    console.log(largura, altura)
-}
-
-ajustaTamanhoPalcoJogo()
+document.getElementById('cronometro').textContent = tempo
 
 var cronometro = setInterval(function(){
     
@@ -32,81 +24,107 @@ var cronometro = setInterval(function(){
 
     if(tempo < 0) {
         clearInterval(cronometro)
-        clearInterval(criaMosquito)
-        window.location.href = 'vitoria.html'
+        clearInterval(criarMosquitos)
+        window.location.href = './vitoria.html'
     } else {
         document.getElementById('cronometro').textContent = tempo
     }
 }, 1000)
 
-function tamanhoAleatorio(){
-    var classe = Math.floor(Math.random() * 3)
+function iniciarJogo(){
 
-    switch(classe){
-        case 0:
-            return 'mosquito1'
-        case 1:
-            return 'mosquito2'
-        case 2:
-            return 'mosquito3'
-    }
-}
-
-function ladoAleatorio(){
-    var classe = Math.floor(Math.random() * 2)
-
-    switch(classe){
-        case 0:
-            return 'ladoA'
-        case 1:
-            return 'ladoB'
-    }
-}
-
-function posicaoRandomica(){
-
-    //remover o mosquito anterior (caso exista)
-    if(document.getElementById('mosquito')) {
-        document.getElementById('mosquito').remove()
-
-        if(vidas > 3) {
-            window.location.href = 'fim_de_jogo.html'
+    var criarMosquitos = setInterval(function(){
+    
+        if(document.getElementById('mosquito')) {
+            if(vidas > 3) {
+                window.location.href = 'fim_de_jogo.html';
+            }
+        
+            document.getElementById('v' + vidas).src = 'imagens/coracao_vazio.png';
+        
+            vidas++;
         }
 
-        document.getElementById('v' + vidas).src = 'imagens/coracao_vazio.png'
-
-        vidas++
-    }
-
-    //setar posição randômica
-    var posicaoX = Math.floor(Math.random() * largura) - 90
-    var posicaoY = Math.floor(Math.random() * altura) - 90
-
-    posicaoX = posicaoX < 0 ? 0 : posicaoX
-    posicaoY = posicaoY < 0 ? 0 : posicaoY
-
-    /*
-    Pensei na possibilidade de fazer direto no js com a função random, mas o problema é que pode ficar umito pequeno ou muito grande
+        let mosquito = new Mosquito();
+        mosquito.criarMosquito();
     
-    var tamanho = Math.floor(Math.random() * 200)
-    mosquito.style.width = tamanho + 'px'
-    mosquito.style.height= tamanho + 'px'
-    */
+    }, criaMosquitoTempo)
+}
 
-    //console.log(posicaoX, posicaoY)
-
-    //criar o elemento html
-    var mosquito = document.createElement('img')
-    mosquito.src = 'imagens/mosquito.png'
-    mosquito.className = tamanhoAleatorio() + ' ' + ladoAleatorio()
-    mosquito.style.left = posicaoX + 'px'
-    mosquito.style.top = posicaoY + 'px'
-    mosquito.style.position = 'absolute'
-    mosquito.id = 'mosquito'
-    mosquito.onclick = function(){
-        this.remove()
-
+class Mosquito{
+    
+    constructor() {
+        this.srcMosquito = './imagens/mosquito.png';
+        this.tamanho = this.gerarTamanhoAleatorio();
+        this.lado = this.gerarLadoAleatorio();
+        this.posicaoX = this.gerarPosicaoAleatoria()['x'];
+        this.posicaoY = this.gerarPosicaoAleatoria()['y'];
     }
 
-    document.body.appendChild(mosquito)
+    gerarTamanhoAleatorio(){
+        let num = Math.floor(Math.random() * 3)
+    
+        switch(num){
+            case 0:
+                return 70;
+            case 1:
+                return 100;
+            case 2:
+                return 130;
+        }
+    }
+    
+    gerarLadoAleatorio(){
+        let nun = Math.floor(Math.random() * 2)
+    
+        switch(nun){
+            case 0:
+                return 1;
+            case 1:
+                return -1;
+        }
+    }
+    
+    gerarPosicaoAleatoria(){
+    
+        let altura = window.innerHeight;
+        let largura = window.innerWidth;
+    
+        let posicaoX = Math.floor(Math.random() * largura) - this.tamanho;
+        let posicaoY = Math.floor(Math.random() * altura) - this.tamanho;
+    
+        posicaoX = posicaoX < 0 ? 0 : posicaoX;
+        posicaoY = posicaoY < 0 ? 0 : posicaoY;
+
+        let posicoes = { x: posicaoX, y: posicaoY };
+    
+        return posicoes;
+    }
+    
+    criarMosquito(){
+        this.removerMosquito();
+
+        let mosquito = document.createElement('img');
+        mosquito.src = this.srcMosquito;
+        mosquito.style.width = this.tamanho + 'px';
+        mosquito.style.height = this.tamanho + 'px';
+        mosquito.style.transform = 'scaleX(' + this.lado + ')';
+        mosquito.style.left = this.posicaoX + 'px';
+        mosquito.style.top = this.posicaoY + 'px';
+        mosquito.style.position = 'absolute';
+        mosquito.id = 'mosquito';
+        mosquito.onmousedown = () => {
+            this.removerMosquito();
+        }
+
+        document.body.appendChild(mosquito);
+    }
+
+    removerMosquito(){
+        let mosquitoExistente = document.getElementById('mosquito');
+        
+        if(mosquitoExistente){
+            mosquitoExistente.remove();
+        }
+    }
 }

@@ -13,27 +13,6 @@ html {
 
 }
 
-.mosquito1 {
-    width: 70px;
-    height: 70px;
-}
-.mosquito2 {
-    width: 100px;
-    height: 100px;
-}
-.mosquito3 {
-    width: 130px;
-    height: 130px;
-}
-
-.ladoA{
-    transform: scaleX(1);
-}
-
-.ladoB{
-    transform: scaleX(-1);
-}
-
 .painel{
     position: absolute;
     width: 190px;

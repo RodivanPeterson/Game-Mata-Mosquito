@@ -3,8 +3,7 @@ var tempo = 15
 var criarMosquitos = null
 var criaMosquitoTempo = 1500
 
-var nivel = window.location.search
-nivel = nivel.replace('?', '')
+var nivel = localStorage.getItem('nivelSelecionado');
 
  if(nivel === 'facil'){
     criaMosquitoTempo = 2000

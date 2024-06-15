@@ -8,19 +8,6 @@
 
     <title>Game Mata Mosquito</title>
 
-    <script>
-        function iniciarJogo(){
-            
-            var nivel = document.getElementById("nivel").value
-
-            if(nivel){
-                //console.log(nivel)
-                window.location.href = 'app.html?' + nivel
-            } else {
-                alert('Selecione uma opção válida')
-            }
-        }
-    </script>
 </head>
 <body>
 
@@ -32,29 +19,42 @@
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col">
-                <div class="d-flex justify-content-center">
-                    <div class="mb-2">
-                        <select class="form-control" id="nivel">
-                            <option value="">-- Selecione o nível --</option>
-                            <option value="facil">Fácil</option>
-                            <option value="normal">Normal</option>
-                            <option value="dificil">Difícil</option>
-                            <option value="impossivel">Impossível</option>
-                        </select>
-                    </div>
-                </div>                
+        <form id="nivelForm" action="./app.html">
+            <div class="row">
+                <div class="col">
+                    <div class="d-flex justify-content-center">
+                        <div class="mb-2">
+                            <select name="nivel" class="form-control">
+                                <option value="">-- Selecione o nível --</option>
+                                <option value="facil">Fácil</option>
+                                <option value="normal">Normal</option>
+                                <option value="dificil">Difícil</option>
+                                <option value="impossivel">Impossível</option>
+                            </select>
+                        </div>
+                    </div>                
+                </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="col">
-                <div class="d-flex justify-content-center">
-                    <button class="btn btn-danger btn-lg" onclick="iniciarJogo()">Iniciar jogo</button>
-                </div>                
+            <div class="row">
+                <div class="col">
+                    <div class="d-flex justify-content-center">
+                        <button id="iniciarJogoBtn" class="btn btn-danger btn-lg" type="submit">Iniciar jogo</button>
+                    </div>                
+                </div>
             </div>
-        </div>
+        </form>
     </div>
     
+    <script>
+        document.getElementById('nivelForm').addEventListener('submit', function(event) {
+            var nivelSelecionado = document.getElementsByName('nivel')[0];
+            if (nivelSelecionado.value === "") {
+                alert("Por favor, selecione um nível!");
+            } else {
+                localStorage.setItem('nivelSelecionado', nivelSelecionado.value);
+            }
+        });
+    </script>
+
 </body>
 </html>
